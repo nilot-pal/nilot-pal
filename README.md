@@ -1,4 +1,4 @@
-# Hi there! <img src="https://github.com/nilot-pal/nilot-pal/assets/72824334/046ce4de-4a43-43dc-b0e3-65a9c5bd936a">
+# Hi there!
 
 ## 🚀 About Me
 
