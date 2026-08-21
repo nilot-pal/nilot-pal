@@ -1,7 +1,7 @@
 # Hi, I'm Nilotpal 👋
 
 I'm a **PhD candidate in Mechanical Engineering at Virginia Tech**, in the Laboratory of Transport
-Phenomena for Advanced Technologies. I defend in **December 2026**.
+Phenomena for Advanced Technologies. I defend by **February 2027**.
 
 **[nilotpalchakraborty.com](https://nilotpalchakraborty.com)** — longer write-ups of the work below.
 
