@@ -3,6 +3,8 @@
 I'm a **PhD candidate in Mechanical Engineering at Virginia Tech**, in the Laboratory of Transport
 Phenomena for Advanced Technologies. I defend in **December 2026**.
 
+**[nilotpalchakraborty.com](https://nilotpalchakraborty.com)** — longer write-ups of the work below.
+
 I build the numerical machinery that closed solvers don't provide. Most of my work is inside other
 people's codes: a ~1,200-line stochastic breakage library in a commercial CFD solver — special
 functions, spline inversion, and a per-particle state channel packed into the IEEE-754 mantissa of
@@ -66,4 +68,4 @@ cross-validation, cost-sensitive evaluation
 - **Mitacs Globalink Research Fellowship** (2019)
 - **Shastri Research Fellowship**, Shastri Indo-Canadian Institute (2019)
 
-📫 nilotpalc@vt.edu
+📫 nilotpalc@vt.edu · [nilotpalchakraborty.com](https://nilotpalchakraborty.com)
