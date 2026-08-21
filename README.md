@@ -1,71 +1,69 @@
-# Hi, I’m Nilotpal 👋
+# Hi, I'm Nilotpal 👋
 
-## About Me
+I'm a **PhD candidate in Mechanical Engineering at Virginia Tech**, in the Laboratory of Transport
+Phenomena for Advanced Technologies. I defend in **December 2026**.
 
-I’m a **PhD candidate in Engineering Mechanics at Virginia Tech**, working in the **Laboratory of Transport Phenomena for Advanced Technologies**. My research focuses on building **scalable CFD simulation workflows on HPC** for compressible and multi-physics problems, with an emphasis on automation, reproducibility, and data readiness for downstream analysis and machine learning. I plan to graduate in **late 2026**.
+I build the numerical machinery that closed solvers don't provide. Most of my work is inside other
+people's codes: a ~1,200-line stochastic breakage library in a commercial CFD solver — special
+functions, spline inversion, and a per-particle state channel packed into the IEEE-754 mantissa of
+the diameter word because the API carries no state — and an HLLC Riemann solver in an open-source
+SPH library, written after working out why its surface-tension model failed at high Reynolds
+number.
 
-My background is in **computational fluid dynamics**, but over time my work has shifted toward **numerical methods, large-scale computation, and software design**. As my research problems became more complex, I increasingly moved from using commercial tools to **writing my own code**, which naturally led me toward systems-level thinking and programming-driven research.
+My application domain is particle ingestion in gas-turbine compressors: 100M+ cell campaigns on
+HPC, sponsored by Rolls-Royce and Pratt & Whitney, both of whom took the solver code for internal
+use. **The portable part is the machinery, not the domain.**
 
-I have experience working across:
-- **Academic research** (CFD, multi-physics, HPC)
-- **Open-source scientific software** (Fortran-based solvers)
-- **Production-level engineering code** (C++ in an industry setting)
+## Some things I've done
 
-Alongside CFD, I actively build **end-to-end machine learning pipelines** to better understand evaluation, cost-aware decision making, and deployment trade-offs, with the goal of applying these principles rigorously in **physics-based ML and AI-driven simulation**.
+**Found and reported a numerical instability in [SPHinXsys](https://github.com/Xiangyu-Hu/SPHinXsys).**
+The shipped multiphase surface-tension model breaks down at high Reynolds number — in the square
+droplet test the fluid particles don't just disorder, they leave the domain. I isolated it with a
+sequence of experiments and reported it in
+[#378](https://github.com/Xiangyu-Hu/SPHinXsys/issues/378) and
+[#497](https://github.com/Xiangyu-Hu/SPHinXsys/issues/497). The maintainers later traced it to
+zero-surface-energy modes and fixed it; I'm acknowledged in the resulting paper:
 
----
+> S. Zhang, S.D.N. Lourenço, X. Hu, *Multiphase SPH for surface tension: resolving
+> zero-surface-energy modes and achieving high Reynolds number simulations*,
+> [Computer Methods in Applied Mechanics and Engineering 444 (2025) 118147](https://doi.org/10.1016/j.cma.2025.118147).
 
-## What I Work On
+**[Lid-driven cavity](https://github.com/nilot-pal/Lid-driven-cavity)** — incompressible
+Navier–Stokes on a staggered grid, validated against Ghia et al. (1982). Term project for Advanced
+CFD, with a full technical report.
 
-- Scalable **CFD workflows** for compressible and multi-physics simulations  
-- **HPC execution and performance analysis** (Slurm, large-memory nodes, parallel scaling)  
-- **Automated postprocessing pipelines** for large simulation datasets  
-- **Droplet impingement and particle-laden flow physics**  
-- **Machine learning pipelines** with emphasis on evaluation, interpretability, and cost-aware modeling  
+**[Membrane permeability from molecular structure](https://github.com/nilot-pal/Membrane-permeability-using-ML)** —
+predicting permeability of drug-like molecules from SMILES-derived descriptors and fingerprints.
+Lasso, MLP and a combined model; R² = 0.90 without the expensive physics-based features, against
+0.99 with them.
 
----
+**Machine learning practice** — [spam detection](https://github.com/nilot-pal/text-classification)
+(TF-IDF baselines vs. DistilBERT) and [churn prediction](https://github.com/nilot-pal/churn-prediction),
+both built around evaluation rather than accuracy: precision–recall, threshold tuning under
+asymmetric costs, and what the added model complexity actually buys.
 
-## Selected Projects
+## Working on
 
-- **Classical NLP vs Transformers for Spam Detection**  
-  Comparative study of TF-IDF baselines and transformer models, emphasizing precision–recall analysis, threshold tuning, and performance-to-cost tradeoffs.
+Learned surrogates for expensive particle-laden physics on the open NASA Rotor 35 geometry, with
+the evaluation done properly — held-out conditions, conservation checks on the predicted
+distributions, and an honest map of where the surrogate stops being trustworthy.
 
-- **Customer Churn Prediction**  
-  End-to-end ML pipeline covering EDA, preprocessing, baseline and ensemble models, interpretability, and deployment-oriented evaluation.
+## Technical
 
-> See pinned repositories for details.
+**Languages** Python · Fortran 90 · C++ · Java · MATLAB · Bash
+**HPC** Linux · Slurm · MPI · large-memory nodes · scaling and performance profiling
+**Numerical** Special functions from scratch · cubic splines and spline inversion · bit-level
+IEEE-754 encoding · approximate Riemann solvers (HLLC) · meshfree/SPH · Lagrangian particle
+tracking · finite volume (RANS/SST) · KD-tree spatial search
+**ML** PyTorch · scikit-learn · XGBoost · NumPy/Pandas — surrogate and reduced-order modelling,
+cross-validation, cost-sensitive evaluation
+**Simulation** ANSYS CFX · Fluent · TurboGrid · ICEM CFD · solver-embedded user subroutines
 
----
+## Awards
 
-## Awards & Fellowships
+- **Summer Cunningham Fellowship**, Virginia Tech Graduate School (2026)
+- **Pratt Fellowship**, Virginia Tech College of Engineering (2022)
+- **Mitacs Globalink Research Fellowship** (2019)
+- **Shastri Research Fellowship**, Shastri Indo-Canadian Institute (2019)
 
-- **Pratt Engineering Scholarship** — Virginia Tech (2022)  
-- **Rolls-Royce Doctoral Fellowship** — Virginia Tech (2022)  
-- **Shastri Research Fellowship** — Shastri Indo-Canadian Institute (2019)  
-- **Mitacs Globalink Research Fellowship** (2019)  
-- **1st Prize**, Sangam Product Competition — Pragyan, NIT Trichy (2019)
-
----
-
-## Technical Skills
-
-**Programming & Scripting**  
-Python · Fortran · C++ · C · Java · MATLAB  
-
-**CFD / Scientific Computing**  
-ANSYS CFX · ANSYS Fluent · TurboGrid · ICEM CFD · Finite-volume methods  
-
-**HPC & Systems**  
-Linux · Slurm · MPI-based parallel workflows · Large-scale simulation campaigns  
-
-**Data & Machine Learning**  
-NumPy · Pandas · Matplotlib · scikit-learn · PyTorch · XGBoost  
-
-**Software Practices**  
-Git · Version control · Testing · Documentation · Reproducible workflows  
-
----
-
-## Tools & Environment
-
-Ubuntu · Windows · VS Code · Jupyter · Spyder · Eclipse
+📫 nilotpalc@vt.edu
