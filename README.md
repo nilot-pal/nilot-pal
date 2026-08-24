@@ -38,13 +38,23 @@ Poiseuille flow, which is the only case there with a closed-form answer to check
 of every run.
 
 **[Lid-driven cavity](https://github.com/nilot-pal/Lid-driven-cavity)** — incompressible
-Navier–Stokes on a staggered grid, validated against Ghia et al. (1982). Term project for Advanced
-CFD, with a full technical report.
+Navier–Stokes on a staggered grid, fractional-step, validated against Ghia et al. (1982). The
+solver diverged at a time step that sat below both the linear CFL and the viscous limit. The cause
+is a non-linear CFL condition that restricts higher-order explicit time integrators, and the code
+now takes its step from that rather than from either textbook criterion.
+
+**[Iterative solvers for finite-difference systems](https://github.com/nilot-pal/cfd-iterative-solvers)** —
+the companion study. Gauss-Seidel, SOR and ADI on a manufactured Poisson problem whose exact
+solution is known, so the error is measured and not inferred from the residual. Observed order of
+accuracy 2.06; ADI reaches tolerance in about a quarter of the iterations SOR needs, at both grid
+resolutions. This is the solver behaviour that drives the cavity's cost scaling.
 
 **[Membrane permeability from molecular structure](https://github.com/nilot-pal/Membrane-permeability-using-ML)** —
-predicting permeability of drug-like molecules from SMILES-derived descriptors and fingerprints.
-Lasso, MLP and a combined model; R² = 0.90 without the expensive physics-based features, against
-0.99 with them.
+can you predict whether a drug-like molecule crosses a lipid membrane from its SMILES string
+alone, without the free energies and pKa values that normally decide it? Four-person course
+project; I built the RDKit feature generation — 200 molecular descriptors and 1024-bit Morgan
+fingerprints — and the cross-validated regularisation search and learning-curve diagnostics for
+the Lasso model. The team's combined Lasso-MLP reached R² = 0.90 from structure alone.
 
 **Machine learning practice** — [spam detection](https://github.com/nilot-pal/text-classification)
 (TF-IDF baselines vs. DistilBERT) and [churn prediction](https://github.com/nilot-pal/churn-prediction),
