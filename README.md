@@ -37,6 +37,14 @@ one-factor-at-a-time sweep, a ladder of dissipation-limiter settings, and a 2 ×
 Poiseuille flow, which is the only case there with a closed-form answer to check against. Video
 of every run.
 
+**[Scaling ANSYS CFX across a cluster](https://github.com/nilot-pal/cfx-cluster-scaling)** —
+standard advice for this solver is to minimise node count, since every iteration exchanges
+boundary data across the network. Measured, it went the other way: **3.9× faster on sixteen nodes
+than one**, because the workload is bound by I/O and memory throughput rather than compute. Shown
+the numbers, the university's research computing director called it "generally the opposite of
+what I would expect". It also established that *licences*, not hardware, were the real ceiling —
+after which the group's allocation was doubled. Independent work, not part of my dissertation.
+
 **[Lid-driven cavity](https://github.com/nilot-pal/Lid-driven-cavity)** — incompressible
 Navier–Stokes on a staggered grid, fractional-step, validated against Ghia et al. (1982). The
 solver diverged at a time step that sat below both the linear CFL and the viscous limit. The cause
