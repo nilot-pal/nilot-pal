@@ -56,7 +56,7 @@ project; I built the RDKit feature generation — 200 molecular descriptors and 
 fingerprints — and the cross-validated regularisation search and learning-curve diagnostics for
 the Lasso model. The team's combined Lasso-MLP reached R² = 0.90 from structure alone.
 
-**Machine learning practice** — [spam detection](https://github.com/nilot-pal/text-classification)
+**Machine learning projects** — [spam detection](https://github.com/nilot-pal/text-classification)
 (TF-IDF baselines vs. DistilBERT) and [churn prediction](https://github.com/nilot-pal/churn-prediction),
 both built around evaluation rather than accuracy: precision–recall, threshold tuning under
 asymmetric costs, and what the added model complexity actually buys.
