@@ -30,6 +30,13 @@ zero-surface-energy modes and fixed it; I'm acknowledged in the resulting paper:
 > zero-surface-energy modes and achieving high Reynolds number simulations*,
 > [Computer Methods in Applied Mechanics and Engineering 444 (2025) 118147](https://doi.org/10.1016/j.cma.2025.118147).
 
+[**sph-high-re-surface-tension**](https://github.com/nilot-pal/sph-high-re-surface-tension) has
+the diagnostic sequence, the HLLC Riemann solver I wrote while chasing it, and the parameter
+studies underneath: a screening design over reference velocity and viscosity, a
+one-factor-at-a-time sweep, a ladder of dissipation-limiter settings, and a 2 × 2 factorial on
+Poiseuille flow, which is the only case there with a closed-form answer to check against. Video
+of every run.
+
 **[Lid-driven cavity](https://github.com/nilot-pal/Lid-driven-cavity)** — incompressible
 Navier–Stokes on a staggered grid, validated against Ghia et al. (1982). Term project for Advanced
 CFD, with a full technical report.
