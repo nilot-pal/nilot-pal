@@ -37,6 +37,15 @@ one-factor-at-a-time sweep, a ladder of dissipation-limiter settings, and a 2 ×
 Poiseuille flow, which is the only case there with a closed-form answer to check against. Video
 of every run.
 
+**[Particle redistribution at rotor–stator interfaces in CFX](https://github.com/nilot-pal/cfx-interface-particle-shift)** —
+erosion maps on a compressor rotor came out striped, with 46.8% of blade nodes taking no impacts
+at all, although particles were injected at random upstream. Eight hypotheses, seven killed by
+experiment. The eighth held: particles are **displaced 4 mm circumferentially crossing the stage
+interface**, landing on the centre-lines of the receiving mesh cells. Isolated by decoupling the
+particles from the flow entirely — rotor at 10⁻⁶ rpm, fluid forces off — so nothing but the
+interface could be doing it. The same class of bug as the SPHinXsys one, in a solver whose source
+I cannot read.
+
 **[Scaling ANSYS CFX across a cluster](https://github.com/nilot-pal/cfx-cluster-scaling)** —
 standard advice for this solver is to minimise node count, since every iteration exchanges
 boundary data across the network. Measured, it went the other way: **3.9× faster on sixteen nodes
