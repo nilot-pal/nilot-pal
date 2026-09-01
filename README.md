@@ -1,7 +1,8 @@
 # Hi, I'm Nilotpal 👋
 
 I'm a **PhD candidate in Mechanical Engineering at Virginia Tech**, **[in the Laboratory of Transport
-Phenomena for Advanced Technologies](https://tpl.me.vt.edu/)**. I defend by **February 2027**.
+Phenomena for Advanced Technologies](https://tpl.me.vt.edu/)**. My PhD confers in **May 2027** and
+I'm available from June, work-authorised on OPT with the STEM extension, so no day-one sponsorship.
 
 **[nilotpalchakraborty.com](https://nilotpalchakraborty.com)**: longer write-ups of the work below.
 
