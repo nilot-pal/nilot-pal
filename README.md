@@ -16,7 +16,12 @@ My application domain is particle ingestion in gas-turbine compressors: 100M+ ce
 HPC, sponsored by Rolls-Royce and Pratt & Whitney, both of whom took the solver code for internal
 use. **The portable part is the machinery, not the domain.**
 
-## Some things I've done
+The pinned repositories below are three pairs, and each pair is one claim.
+
+## 1. Finding defects in other people's solvers
+
+One open-source library, one closed commercial code. In both cases the solver did not crash. It
+returned a plausible answer that was wrong, which is the harder failure to catch.
 
 **Found and reported a numerical instability in [SPHinXsys](https://github.com/Xiangyu-Hu/SPHinXsys).**
 The shipped multiphase surface-tension model breaks down at high Reynolds number: in the square
@@ -43,13 +48,14 @@ experiment. The eighth held: particles are **displaced 4 mm circumferentially cr
 interface**, landing on the centre-lines of the receiving mesh cells. Isolated by decoupling the
 particles from the flow entirely (rotor at 10⁻⁶ rpm, fluid forces off), so nothing but the
 interface could be doing it. The same class of bug as the SPHinXsys one, in a solver whose source
-I cannot read.
+I cannot read. It is not specific to one case either: the shift is present in **all five geometries
+I have tested**, including the vendor's own tutorial geometry, and the particles land on whatever
+the receiving mesh offers, cell centres in one, diagonals in another.
 
-**[Scaling ANSYS CFX across a cluster](https://github.com/nilot-pal/cfx-cluster-scaling)**: standard advice for this solver is to minimise node count, since every iteration exchanges
-boundary data across the network. Measured, it went the other way: **3.9× faster on sixteen nodes
-than one**, because the workload is bound by I/O and memory throughput rather than compute. Shown
-the numbers, the university's research computing director called it "generally the opposite of
-what I would expect". It also established that *licences*, not hardware, were the real ceiling, after which the group's allocation was doubled. Independent work, not part of my dissertation.
+## 2. Numerical methods, and what they cost to run
+
+Small problems with exact answers, so the error can be measured rather than inferred, and the cost
+of getting it measured too.
 
 **[Lid-driven cavity](https://github.com/nilot-pal/Lid-driven-cavity)**: incompressible
 Navier–Stokes on a staggered grid, fractional-step, validated against Ghia et al. (1982). The
@@ -62,6 +68,28 @@ solution is known, so the error is measured and not inferred from the residual. 
 accuracy 2.06; ADI reaches tolerance in about a quarter of the iterations SOR needs, at both grid
 resolutions. This is the solver behaviour that drives the cavity's cost scaling.
 
+## 3. Large simulation, made feasible and made readable
+
+Getting the runs to finish is half of it. The other half is being able to believe the output.
+
+**[Scaling ANSYS CFX across a cluster](https://github.com/nilot-pal/cfx-cluster-scaling)**: standard advice for this solver is to minimise node count, since every iteration exchanges
+boundary data across the network. Measured, it went the other way: **3.9× faster on sixteen nodes
+than one**, because the workload is bound by I/O and memory throughput rather than compute. Shown
+the numbers, the university's research computing director called it "generally the opposite of
+what I would expect". It also established that *licences*, not hardware, were the real ceiling, after which the group's allocation was doubled. It also fixed the size at which the queue is worth using at all: below about 50 cores the workstation on the desk was the faster machine. Independent work, not part of my dissertation.
+
+**[Recovering particle identity from CFX impact exports](https://github.com/nilot-pal/cfx-particle-id-recovery)**: CFX writes one row per particle-wall impact and does not write which particle it belongs
+to, so per-particle analysis is impossible by design. I recovered it by matching every impact
+against a 14 GB trajectory file on its position and velocity signature: **586,764 of 586,764
+rotor-blade impacts attributed, 100%**. The answer was that **4.6% of the particles produce 92% of
+the impacts**: a small trapped population grazing the blade at 0.08°, while the physical map, the
+one everyone else was seeing, is a narrow band at the leading edge. The first version of that
+pipeline took 2 h 15 min and then ran out of memory. Parallelising it bought nothing and rewriting
+it in C++ bought nothing, because the cost was algorithmic; a streamed spatial index took it to
+four minutes on three times the data.
+
+## Other work
+
 **[Membrane permeability from molecular structure](https://github.com/nilot-pal/Membrane-permeability-using-ML)**: can you predict whether a drug-like molecule crosses a lipid membrane from its SMILES string
 alone, without the free energies and pKa values that normally decide it? Four-person course
 project; I built the RDKit feature generation (200 molecular descriptors and 1024-bit Morgan fingerprints), and the cross-validated regularisation search and learning-curve diagnostics for
@@ -71,12 +99,6 @@ the Lasso model. The team's combined Lasso-MLP reached R² = 0.90 from structure
 (TF-IDF baselines vs. DistilBERT), and [churn prediction](https://github.com/nilot-pal/churn-prediction),
 both built around evaluation rather than accuracy: precision–recall, threshold tuning under
 asymmetric costs, and what the added model complexity actually buys.
-
-## Working on
-
-Learned surrogates for expensive particle-laden physics on the open NASA Rotor 35 geometry, with
-the evaluation done properly: held-out conditions, conservation checks on the predicted
-distributions, and an honest map of where the surrogate stops being trustworthy.
 
 ## Technical
 
