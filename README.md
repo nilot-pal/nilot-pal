@@ -13,8 +13,7 @@ the diameter word because the API carries no state. An HLLC Riemann solver in an
 library, written after working out why its surface-tension model failed at high Reynolds number.
 
 My application domain is particle ingestion in gas-turbine compressors: 100M+ cell campaigns on
-HPC, sponsored by Rolls-Royce and Pratt & Whitney, both of whom took the solver code for internal
-use. **The portable part is the machinery, not the domain.**
+HPC, sponsored by Rolls-Royce and Pratt & Whitney. **The portable part is the machinery, not the domain.**
 
 The pinned repositories below are three pairs, and each pair is one claim.
 
