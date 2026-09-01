@@ -95,14 +95,19 @@ alone, without the free energies and pKa values that normally decide it? Four-pe
 project; I built the RDKit feature generation (200 molecular descriptors and 1024-bit Morgan fingerprints), and the cross-validated regularisation search and learning-curve diagnostics for
 the Lasso model. The team's combined Lasso-MLP reached R² = 0.90 from structure alone.
 
-**Machine learning projects**, [spam detection](https://github.com/nilot-pal/text-classification)
-(TF-IDF baselines vs. DistilBERT), and [churn prediction](https://github.com/nilot-pal/churn-prediction),
-both built around evaluation rather than accuracy: precision–recall, threshold tuning under
-asymmetric costs, and what the added model complexity actually buys.
+**Machine learning, end to end and evaluated properly.** Two projects carried from raw data through
+feature engineering, model selection and threshold choice to a deployment decision:
+[spam detection](https://github.com/nilot-pal/text-classification) (TF-IDF and logistic-regression
+baselines against DistilBERT) and
+[churn prediction](https://github.com/nilot-pal/churn-prediction). DistilBERT wins on recall and on
+F1, and is still not obviously the model to deploy, because **model selection and threshold
+selection are one decision rather than two**, and the ranking flips when the cost asymmetry moves.
+The full argument, with the tables, is at
+[nilotpalchakraborty.com/evaluation](https://nilotpalchakraborty.com/evaluation.html).
 
 ## All repositories
 
-GitHub pins six. Here is the full set, in the same three groups.
+GitHub pins six. These are the repositories behind the three claims above, whether pinned or not.
 
 **Finding defects in other people's solvers**
 
