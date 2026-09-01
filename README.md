@@ -15,7 +15,8 @@ library, written after working out why its surface-tension model failed at high 
 My application domain is particle ingestion in gas-turbine compressors: 100M+ cell campaigns on
 HPC, sponsored by Rolls-Royce and Pratt & Whitney. **The portable part is the machinery, not the domain.**
 
-The pinned repositories below are three pairs, and each pair is one claim.
+The work below groups into three claims. Only six repositories can be pinned, so the full list is
+at the bottom.
 
 ## 1. Finding defects in other people's solvers
 
@@ -98,6 +99,29 @@ the Lasso model. The team's combined Lasso-MLP reached R² = 0.90 from structure
 (TF-IDF baselines vs. DistilBERT), and [churn prediction](https://github.com/nilot-pal/churn-prediction),
 both built around evaluation rather than accuracy: precision–recall, threshold tuning under
 asymmetric costs, and what the added model complexity actually buys.
+
+## All repositories
+
+GitHub pins six. Here is the full set, in the same three groups.
+
+**Finding defects in other people's solvers**
+
+- [sph-high-re-surface-tension](https://github.com/nilot-pal/sph-high-re-surface-tension): a surface-tension model that fails above Re ≈ 10³, the diagnostic sequence, and an HLLC Riemann solver
+- [cfx-interface-particle-shift](https://github.com/nilot-pal/cfx-interface-particle-shift): particles displaced crossing a rotor–stator interface, in all five geometries tested
+
+**Numerical methods, and what they cost to run**
+
+- [cfd-iterative-solvers](https://github.com/nilot-pal/cfd-iterative-solvers): Gauss-Seidel, SOR and ADI against a known exact solution; observed order of accuracy 2.06
+- [Lid-driven-cavity](https://github.com/nilot-pal/Lid-driven-cavity): finite-volume Navier–Stokes validated against Ghia et al., and why it diverged inside both textbook stability limits
+
+**Large simulation, made feasible and made readable**
+
+- [cfx-cluster-scaling](https://github.com/nilot-pal/cfx-cluster-scaling): 3.9× faster on sixteen nodes than one, and the licence ceiling nobody had looked for
+- [cfx-particle-id-recovery](https://github.com/nilot-pal/cfx-particle-id-recovery): 4.6% of the particles were producing 92% of the impacts
+
+**Other**
+
+- [Membrane-permeability-using-ML](https://github.com/nilot-pal/Membrane-permeability-using-ML): permeability from SMILES alone, R² = 0.90
 
 ## Technical
 
