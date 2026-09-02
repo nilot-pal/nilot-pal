@@ -77,6 +77,19 @@ is the technique, reimplemented in C++ with the tests the original could never h
 Small problems with exact answers, so the error can be measured rather than inferred, and the cost
 of getting it measured too.
 
+**[Red-black SOR on a GPU](https://github.com/nilot-pal/cuda-poisson-sor)**: the Poisson pressure
+solve is where an implicit CFD code spends its time, and red-black ordering is the standard way to
+parallelise it. Measured on an NVIDIA L40S against a CPU baseline in the same language with the
+same compiler and flags. **The reordering is free**: red-black and natural ordering converge within
+**3%** across a 16× range in grid size, as Young's theory says they must. On one core, colouring is
+worth up to **5×**, not from threads but because the lexicographic sweep carries a loop-borne
+dependency and will not vectorise. The GPU overtakes one core between **65² and 129²** and reaches
+**5.1× against 32 cores at 8193²**. The kernel is bandwidth-bound at **89.6% of achievable DRAM
+throughput** and was moving **2.29× the bytes it needed**; splitting the two colours into separate
+arrays cut traffic to 1.48× and runtime by 1.55×. **Traffic ratio 1.54, wall-clock ratio 1.55: the
+runtime is the traffic, to within one percent.** Every dead end and wrong prediction is in
+`DECISIONS.md`, written while building.
+
 **[Lid-driven cavity](https://github.com/nilot-pal/Lid-driven-cavity)**: incompressible
 Navier–Stokes on a staggered grid, fractional-step, validated against Ghia et al. (1982). The
 solver diverged at a time step that sat below both the linear CFL and the viscous limit. The cause
@@ -140,6 +153,7 @@ GitHub pins six. These are the repositories behind the three claims above, wheth
 
 **Numerical methods, and what they cost to run**
 
+- [cuda-poisson-sor](https://github.com/nilot-pal/cuda-poisson-sor): red-black SOR on an L40S, bandwidth-bound at 89.6% of achievable throughput, with runtime tracking memory traffic to within 1%
 - [cfd-iterative-solvers](https://github.com/nilot-pal/cfd-iterative-solvers): Gauss-Seidel, SOR and ADI against a known exact solution; observed order of accuracy 2.06
 - [Lid-driven-cavity](https://github.com/nilot-pal/Lid-driven-cavity): finite-volume Navier–Stokes validated against Ghia et al., and why it diverged inside both textbook stability limits
 
