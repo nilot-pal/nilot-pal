@@ -140,7 +140,7 @@ The full argument, with the tables, is at
 
 ## All repositories
 
-GitHub pins six. These are the repositories behind the three claims above, whether pinned or not.
+GitHub pins six. These are the repositories behind the four claims above, whether pinned or not.
 
 **Finding defects in other people's solvers**
 
@@ -165,6 +165,8 @@ GitHub pins six. These are the repositories behind the three claims above, wheth
 **Other**
 
 - [Membrane-permeability-using-ML](https://github.com/nilot-pal/Membrane-permeability-using-ML): permeability from SMILES alone, R² = 0.90
+- [text-classification](https://github.com/nilot-pal/text-classification): TF-IDF and logistic regression against DistilBERT, and why the F1 winner is not the obvious deployment choice
+- [churn-prediction](https://github.com/nilot-pal/churn-prediction): end to end, with threshold selection treated as part of model selection
 
 ## Technical
 
