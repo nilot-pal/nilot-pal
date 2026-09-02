@@ -1,146 +1,43 @@
 # Hi, I'm Nilotpal 👋
 
-I'm a **PhD candidate in Mechanical Engineering at Virginia Tech**, **[in the Laboratory of Transport
-Phenomena for Advanced Technologies](https://tpl.me.vt.edu/)**. My PhD confers in **May 2027** and
-I'm available from June, work-authorised on OPT with the STEM extension, so no day-one sponsorship.
+**I build the numerical machinery that closed solvers don't provide.**
 
-**[nilotpalchakraborty.com](https://nilotpalchakraborty.com)**: longer write-ups of the work below.
+Five years inside commercial and open-source CFD codes: a ~1,200-line stochastic breakage library
+in ANSYS CFX, an HLLC Riemann solver in SPHinXsys, and 100M+ cell campaigns on HPC. PhD in
+Mechanical Engineering at Virginia Tech, conferring **May 2027**, available from June, work-authorised
+on OPT with the STEM extension so no day-one sponsorship.
 
-I build the numerical machinery that closed solvers don't provide. Most of my work is inside other
-people's codes. A ~1,200-line stochastic breakage library in a commercial CFD solver, with special
-functions, spline inversion, and a per-particle state channel packed into the IEEE-754 mantissa of
-the diameter word because the API carries no state. An HLLC Riemann solver in an open-source SPH
-library, written after working out why its surface-tension model failed at high Reynolds number.
+Longer write-ups of everything below: **[nilotpalchakraborty.com](https://nilotpalchakraborty.com)**
 
-My application domain is particle ingestion in gas-turbine compressors: 100M+ cell campaigns on
-HPC, sponsored by Rolls-Royce and Pratt & Whitney. **The portable part is the machinery, not the domain.**
+---
 
-The work below groups into four claims. Only six repositories can be pinned, so the full list is
-at the bottom.
+### Four things I can show you
 
-## 1. Finding defects in other people's solvers
+**Defects I found in solvers I did not write.** One open-source, one commercial. Neither crashed;
+both returned plausible answers that were wrong. The maintainers of the first fixed it and
+acknowledged me in [*Computer Methods in Applied Mechanics and Engineering* **444** (2025)](https://doi.org/10.1016/j.cma.2025.118147).
+The second is present in all five geometries I have tested.
 
-One open-source library, one closed commercial code. In both cases the solver did not crash. It
-returned a plausible answer that was wrong, which is the harder failure to catch.
+**Machinery built inside a closed API.** Damage history had to survive a particle migrating between
+MPI ranks, and the solver's user routine returns six values of which only the diameter travels on.
+So the state went into the unused mantissa bits of that diameter, costing 0.39% of the carrier,
+which is three orders of magnitude below what the mesh resolves.
 
-**Found and reported a numerical instability in [SPHinXsys](https://github.com/Xiangyu-Hu/SPHinXsys).**
-The shipped multiphase surface-tension model breaks down at high Reynolds number: in the square
-droplet test the fluid particles don't just disorder, they leave the domain. I isolated it with a
-sequence of experiments and reported it in
-[#378](https://github.com/Xiangyu-Hu/SPHinXsys/issues/378), and
-[#497](https://github.com/Xiangyu-Hu/SPHinXsys/issues/497). The maintainers later traced it to
-zero-surface-energy modes and fixed it; I'm acknowledged in the resulting paper:
+**Numerical methods, measured rather than asserted.** Red-black SOR on an NVIDIA L40S against a
+matched CPU baseline: bandwidth-bound at 89.6% of achievable DRAM throughput, and once the memory
+traffic was cut, runtime tracked traffic to within one percent. Observed order of accuracy 2.06
+against a manufactured solution, not inferred from a residual.
 
-> S. Zhang, S.D.N. Lourenço, X. Hu, *Multiphase SPH for surface tension: resolving
-> zero-surface-energy modes and achieving high Reynolds number simulations*,
-> [Computer Methods in Applied Mechanics and Engineering 444 (2025) 118147](https://doi.org/10.1016/j.cma.2025.118147).
+**Large simulation, made feasible and made readable.** A scaling study that got **3.9× on sixteen
+nodes** where the textbook predicts a penalty, and found licences rather than hardware were the
+ceiling. Then attribution of 586,764 impacts back to the particles that caused them, showing
+**4.6% of particles were producing 92% of the map**.
 
-[**sph-high-re-surface-tension**](https://github.com/nilot-pal/sph-high-re-surface-tension) has
-the diagnostic sequence, the HLLC Riemann solver I wrote while chasing it, and the parameter
-studies underneath: a screening design over reference velocity and viscosity, a
-one-factor-at-a-time sweep, a ladder of dissipation-limiter settings, and a 2 × 2 factorial on
-Poiseuille flow, which is the only case there with a closed-form answer to check against. Video
-of every run.
+The six pinned repositories below are those four claims. Everything else is listed at the bottom.
 
-**[Particle redistribution at rotor–stator interfaces in CFX](https://github.com/nilot-pal/cfx-interface-particle-shift)**: erosion maps on a compressor rotor came out striped, with 46.8% of blade nodes taking no impacts
-at all, although particles were injected at random upstream. Eight hypotheses, seven killed by
-experiment. The eighth held: particles are **displaced 4 mm circumferentially crossing the stage
-interface**, landing on the centre-lines of the receiving mesh cells. Isolated by decoupling the
-particles from the flow entirely (rotor at 10⁻⁶ rpm, fluid forces off), so nothing but the
-interface could be doing it. The same class of bug as the SPHinXsys one, in a solver whose source
-I cannot read. It is not specific to one case either: the shift is present in **all five geometries
-I have tested**, including the vendor's own tutorial geometry, and the particles land on whatever
-the receiving mesh offers, cell centres in one, diagonals in another.
-
-## 2. Building machinery inside a solver with no room for it
-
-**[A per-particle state channel in the unused mantissa bits of a float](https://github.com/nilot-pal/mantissa-state-channel)**:
-the physics needed damage history to survive a particle migrating between MPI ranks, and the
-solver's user API returns six values per impact, of which only the diameter is still attached to
-the particle when it reaches the next blade. There is no seventh slot and no way to add one, so the
-state goes into the low bits of the diameter. The budget is tight: **15 of 23 mantissa bits**,
-leaving the carrier accurate to **0.39%**, or 0.24 micrometres on a 100 micrometre grain. Whether
-that is acceptable is a property of the case rather than of the code, so the repo measures it:
-across **385,170 nodes on 11 blade surfaces** the median mesh facet is nearly three orders of
-magnitude coarser than the error the channel introduces.
-
-The part that makes it deployable inside a solver you did not write is that **code which knows
-nothing about the encoding still reads a usable diameter**. Twelve tests, the figures generated by
-running the library rather than drawn, and the design notes for the variant that can tell when the
-carrier it is reading is not the one it wrote.
-
-The production version is Fortran 90 inside ANSYS CFX, about 1,200 lines, and is not public. This
-is the technique, reimplemented in C++ with the tests the original could never have.
-
-## 3. Numerical methods, and what they cost to run
-
-Small problems with exact answers, so the error can be measured rather than inferred, and the cost
-of getting it measured too.
-
-**[Red-black SOR on a GPU](https://github.com/nilot-pal/cuda-poisson-sor)**: the Poisson pressure
-solve is where an implicit CFD code spends its time, and red-black ordering is the standard way to
-parallelise it. Measured on an NVIDIA L40S against a CPU baseline in the same language with the
-same compiler and flags. **The reordering is free**: red-black and natural ordering converge within
-**3%** across a 16× range in grid size, as Young's theory says they must. On one core, colouring is
-worth up to **5×**, not from threads but because the lexicographic sweep carries a loop-borne
-dependency and will not vectorise. The GPU overtakes one core between **65² and 129²** and reaches
-**5.1× against 32 cores at 8193²**. The kernel is bandwidth-bound at **89.6% of achievable DRAM
-throughput** and was moving **2.29× the bytes it needed**; splitting the two colours into separate
-arrays cut traffic to 1.48× and runtime by 1.55×. **Traffic ratio 1.54, wall-clock ratio 1.55: the
-runtime is the traffic, to within one percent.** Every dead end and wrong prediction is in
-`DECISIONS.md`, written while building.
-
-**[Lid-driven cavity](https://github.com/nilot-pal/Lid-driven-cavity)**: incompressible
-Navier–Stokes on a staggered grid, fractional-step, validated against Ghia et al. (1982). The
-solver diverged at a time step that sat below both the linear CFL and the viscous limit. The cause
-is a non-linear CFL condition that restricts higher-order explicit time integrators, and the code
-now takes its step from that rather than from either textbook criterion.
-
-**[Iterative solvers for finite-difference systems](https://github.com/nilot-pal/cfd-iterative-solvers)**: the companion study. Gauss-Seidel, SOR and ADI on a manufactured Poisson problem whose exact
-solution is known, so the error is measured and not inferred from the residual. Observed order of
-accuracy 2.06; ADI reaches tolerance in about a quarter of the iterations SOR needs, at both grid
-resolutions. This is the solver behaviour that drives the cavity's cost scaling.
-
-## 4. Large simulation, made feasible and made readable
-
-Getting the runs to finish is half of it. The other half is being able to believe the output.
-
-**[Scaling ANSYS CFX across a cluster](https://github.com/nilot-pal/cfx-cluster-scaling)**: standard advice for this solver is to minimise node count, since every iteration exchanges
-boundary data across the network. Measured, it went the other way: **3.9× faster on sixteen nodes
-than one**, because the workload is bound by I/O and memory throughput rather than compute. Shown
-the numbers, the university's research computing director called it "generally the opposite of
-what I would expect". It also established that *licences*, not hardware, were the real ceiling, after which the group's allocation was doubled. It also fixed the size at which the queue is worth using at all: below about 50 cores the workstation on the desk was the faster machine. Independent work, not part of my dissertation.
-
-**[Recovering particle identity from CFX impact exports](https://github.com/nilot-pal/cfx-particle-id-recovery)**: CFX writes one row per particle-wall impact and does not write which particle it belongs
-to, so per-particle analysis is impossible by design. I recovered it by matching every impact
-against a 14 GB trajectory file on its position and velocity signature: **586,764 of 586,764
-rotor-blade impacts attributed, 100%**. The answer was that **4.6% of the particles produce 92% of
-the impacts**: a small trapped population grazing the blade at 0.08°, while the physical map, the
-one everyone else was seeing, is a narrow band at the leading edge. The first version of that
-pipeline took 2 h 15 min and then ran out of memory. Parallelising it bought nothing and rewriting
-it in C++ bought nothing, because the cost was algorithmic; a streamed spatial index took it to
-four minutes on three times the data.
-
-## Other work
-
-**[Membrane permeability from molecular structure](https://github.com/nilot-pal/Membrane-permeability-using-ML)**: can you predict whether a drug-like molecule crosses a lipid membrane from its SMILES string
-alone, without the free energies and pKa values that normally decide it? Four-person course
-project; I built the RDKit feature generation (200 molecular descriptors and 1024-bit Morgan fingerprints), and the cross-validated regularisation search and learning-curve diagnostics for
-the Lasso model. The team's combined Lasso-MLP reached R² = 0.90 from structure alone.
-
-**Machine learning, end to end and evaluated properly.** Two projects carried from raw data through
-feature engineering, model selection and threshold choice to a deployment decision:
-[spam detection](https://github.com/nilot-pal/text-classification) (TF-IDF and logistic-regression
-baselines against DistilBERT) and
-[churn prediction](https://github.com/nilot-pal/churn-prediction). DistilBERT wins on recall and on
-F1, and is still not obviously the model to deploy, because **model selection and threshold
-selection are one decision rather than two**, and the ranking flips when the cost asymmetry moves.
-The full argument, with the tables, is at
-[nilotpalchakraborty.com/evaluation](https://nilotpalchakraborty.com/evaluation.html).
+---
 
 ## All repositories
-
-GitHub pins six. These are the repositories behind the four claims above, whether pinned or not.
 
 **Finding defects in other people's solvers**
 
@@ -170,13 +67,10 @@ GitHub pins six. These are the repositories behind the four claims above, whethe
 
 ## Technical
 
-**Languages** Python · Fortran 90 · C++ · Java · MATLAB · Bash
-**HPC** Linux · Slurm · MPI · large-memory nodes · scaling and performance profiling
-**Numerical** Special functions from scratch · cubic splines and spline inversion · bit-level
-IEEE-754 encoding · approximate Riemann solvers (HLLC) · meshfree/SPH · Lagrangian particle
-tracking · finite volume (RANS/SST) · KD-tree spatial search
-**ML** PyTorch · scikit-learn · XGBoost · NumPy/Pandas, surrogate and reduced-order modelling,
-cross-validation, cost-sensitive evaluation
+**Languages** Python · Fortran 90 · C++ · CUDA · MATLAB · Bash
+**HPC** Linux · Slurm · MPI · GPU (CUDA, Nsight Compute) · large-memory nodes · scaling and performance profiling
+**Numerical** Iterative solvers for linear systems (Gauss-Seidel, SOR, ADI) · finite volume and finite difference · verification against manufactured and analytic solutions · stability analysis · approximate Riemann solvers (HLLC) · special functions from scratch · cubic splines and spline inversion · bit-level IEEE-754 encoding · meshfree/SPH · Lagrangian particle tracking · KD-tree spatial search
+**ML** PyTorch · scikit-learn · XGBoost · NumPy/Pandas · surrogate and reduced-order modelling · cross-validation · cost-sensitive evaluation
 **Simulation** ANSYS CFX · Fluent · TurboGrid · ICEM CFD · solver-embedded user subroutines
 
 ## Awards
