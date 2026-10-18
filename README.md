@@ -1,6 +1,7 @@
 # Hi, I'm Nilotpal 👋
 
-**I build the numerical machinery that closed solvers don't provide.**
+**I find out whether a computational result can be trusted, and build whatever is missing to get
+there.**
 
 Five years inside commercial and open-source CFD codes: a ~1,200-line stochastic breakage library
 in ANSYS CFX, an HLLC Riemann solver in SPHinXsys, and 100M+ cell campaigns on HPC. PhD in
@@ -13,10 +14,13 @@ Longer write-ups of everything below: **[nilotpalchakraborty.com](https://nilotp
 
 ### Four things I can show you
 
-**Defects I found in solvers I did not write.** One open-source, one commercial. Neither crashed;
-both returned plausible answers that were wrong. The maintainers of the first fixed it and
-acknowledged me in [*Computer Methods in Applied Mechanics and Engineering* **444** (2025)](https://doi.org/10.1016/j.cma.2025.118147).
-The second is present in all five geometries I have tested.
+**Defects I found in solvers I did not write.** Five of them, across four codes, and none crashed
+or warned; all returned plausible answers that were wrong. The maintainers of the first fixed it
+and acknowledged me in [*Computer Methods in Applied Mechanics and Engineering* **444** (2025)](https://doi.org/10.1016/j.cma.2025.118147).
+The newest is an undocumented parameter in ANSYS CFX that silently stops a fragmentation cascade
+after three generations. I found it by reconstructing particle lineage: at generation three **no
+particle ever broke, although 3,773 impacts carried more than enough energy**. Anyone running
+wall-film breakage at the default is affected and is not told.
 
 **Machinery built inside a closed API.** Damage history had to survive a particle migrating between
 MPI ranks, and the solver's user routine returns six values of which only the diameter travels on.
@@ -33,7 +37,19 @@ nodes** where the textbook predicts a penalty, and found licences rather than ha
 ceiling. Then attribution of 586,764 impacts back to the particles that caused them, showing
 **4.6% of particles were producing 92% of the map**.
 
-The six pinned repositories below are those four claims. Everything else is listed at the bottom.
+---
+
+### How to check any of this
+
+Three of the repositories below carry a decisions log, written while building rather than after:
+what was tried, what failed, and what I withdrew.
+
+[`cfx-wall-film-breakage`](https://github.com/nilot-pal/cfx-wall-film-breakage) has three
+retractions in it. The one worth reading is where I had written down, twice, that the solver was
+destroying data I had encoded in a particle's diameter. An instrumented run showed it was not:
+60,385 records carried a valid payload against 0 in the route that was failing, and the branch
+losing it was mine. The negative results are in there for the same reason, including a repair that
+is exact in a box and not deployable in a real machine.
 
 ---
 
@@ -43,6 +59,7 @@ The six pinned repositories below are those four claims. Everything else is list
 
 - [sph-high-re-surface-tension](https://github.com/nilot-pal/sph-high-re-surface-tension): a surface-tension model that fails above Re ≈ 10³, the diagnostic sequence, and an HLLC Riemann solver
 - [cfx-interface-particle-shift](https://github.com/nilot-pal/cfx-interface-particle-shift): particles displaced crossing a rotor–stator interface, in all five geometries tested
+- [cfx-wall-film-breakage](https://github.com/nilot-pal/cfx-wall-film-breakage): restitution applied in the wrong frame on a rotating wall, proved with a reproducer whose answer is known by construction, plus the undocumented generation cap above
 
 **Building machinery inside a solver with no room for it**
 
@@ -67,11 +84,9 @@ The six pinned repositories below are those four claims. Everything else is list
 
 ## Technical
 
-**Languages** Python · Fortran 90 · C++ · CUDA · MATLAB · Bash
-**HPC** Linux · Slurm · MPI · GPU (CUDA, Nsight Compute) · large-memory nodes · scaling and performance profiling
-**Numerical** Iterative solvers for linear systems (Gauss-Seidel, SOR, ADI) · finite volume and finite difference · verification against manufactured and analytic solutions · stability analysis · approximate Riemann solvers (HLLC) · special functions from scratch · cubic splines and spline inversion · bit-level IEEE-754 encoding · meshfree/SPH · Lagrangian particle tracking · KD-tree spatial search
-**ML** PyTorch · scikit-learn · XGBoost · NumPy/Pandas · surrogate and reduced-order modelling · cross-validation · cost-sensitive evaluation
-**Simulation** ANSYS CFX · Fluent · TurboGrid · ICEM CFD · solver-embedded user subroutines
+**Languages and tooling** Python · Fortran 90 · C++ · CUDA · MATLAB · Bash · Linux · Slurm · MPI · OpenMP · CMake · Nsight Compute · Git
+**Numerical** Iterative solvers for linear systems (Gauss-Seidel, SOR, ADI) · finite volume and finite difference · verification against manufactured and analytic solutions · stability analysis · approximate Riemann solvers (HLLC) · special functions from scratch · cubic splines and spline inversion · bit-level IEEE-754 encoding · meshfree/SPH · Lagrangian particle tracking · KD-tree spatial search · constrained optimisation (SQP) and inverse problems · surrogate and reduced-order modelling (PyTorch, scikit-learn, XGBoost)
+**Simulation** ANSYS CFX · Fluent · TurboGrid · ICEM CFD · STAR-CCM+ · solver-embedded user subroutines
 
 ## Awards
 
