@@ -5,8 +5,8 @@ there.**
 
 Five years inside commercial and open-source CFD codes: a ~1,200-line stochastic breakage library
 in ANSYS CFX, an HLLC Riemann solver in SPHinXsys, and 100M+ cell campaigns on HPC. PhD in
-Mechanical Engineering at Virginia Tech, conferring **May 2027**, available from June, work-authorised
-on OPT with the STEM extension so no day-one sponsorship.
+Mechanical Engineering at Virginia Tech, conferring **May 2027**, available from June, work-authorized
+on OPT with the STEM extension: no sponsorship needed at hire, H-1B later.
 
 Longer write-ups of everything below: **[nilotpalchakraborty.com](https://nilotpalchakraborty.com)**
 
@@ -33,7 +33,7 @@ traffic was cut, runtime tracked traffic to within one percent. Observed order o
 against a manufactured solution, not inferred from a residual.
 
 **Large simulation, made feasible and made readable.** A scaling study that got **3.9× on sixteen
-nodes** where the textbook predicts a penalty, and found licences rather than hardware were the
+nodes** where the textbook predicts a penalty, and found licenses rather than hardware were the
 ceiling. Then attribution of 586,764 impacts back to the particles that caused them, showing
 **4.6% of particles were producing 92% of the map**.
 
@@ -73,7 +73,7 @@ is exact in a box and not deployable in a real machine.
 
 **Large simulation, made feasible and made readable**
 
-- [cfx-cluster-scaling](https://github.com/nilot-pal/cfx-cluster-scaling): 3.9× faster on sixteen nodes than one, and the licence ceiling nobody had looked for
+- [cfx-cluster-scaling](https://github.com/nilot-pal/cfx-cluster-scaling): 3.9× faster on sixteen nodes than one, and the license ceiling nobody had looked for
 - [cfx-particle-id-recovery](https://github.com/nilot-pal/cfx-particle-id-recovery): 4.6% of the particles were producing 92% of the impacts
 
 **Other**
@@ -85,8 +85,8 @@ is exact in a box and not deployable in a real machine.
 ## Technical
 
 **Languages and tooling** Python · Fortran 90 · C++ · CUDA · MATLAB · Bash · Linux · Slurm · MPI · OpenMP · CMake · Nsight Compute · Git
-**Numerical** Iterative solvers for linear systems (Gauss-Seidel, SOR, ADI) · finite volume and finite difference · verification against manufactured and analytic solutions · stability analysis · approximate Riemann solvers (HLLC) · special functions from scratch · cubic splines and spline inversion · bit-level IEEE-754 encoding · meshfree/SPH · Lagrangian particle tracking · KD-tree spatial search · constrained optimisation (SQP) and inverse problems · surrogate and reduced-order modelling (PyTorch, scikit-learn, XGBoost)
-**Simulation** ANSYS CFX · Fluent · TurboGrid · ICEM CFD · STAR-CCM+ · solver-embedded user subroutines
+**Numerical** Iterative solvers for linear systems (Gauss-Seidel, SOR, ADI) · finite volume and finite difference · verification against manufactured and analytic solutions · stability analysis · approximate Riemann solvers (HLLC) · special functions from scratch · cubic splines and spline inversion · bit-level IEEE-754 encoding · meshfree/SPH · Lagrangian particle tracking · KD-tree spatial search · constrained optimization (SQP) and inverse problems · surrogate and reduced-order modeling (PyTorch, scikit-learn, XGBoost)
+**Simulation** ANSYS CFX · Fluent · STAR-CCM+ · TurboGrid · ICEM CFD · solver-embedded user subroutines
 
 ## Awards
 
