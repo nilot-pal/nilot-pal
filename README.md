@@ -18,9 +18,7 @@ Longer write-ups of everything below: **[nilotpalchakraborty.com](https://nilotp
 or warned; all returned plausible answers that were wrong. The maintainers of the first fixed it
 and acknowledged me in [*Computer Methods in Applied Mechanics and Engineering* **444** (2025)](https://doi.org/10.1016/j.cma.2025.118147).
 ANSYS Development reproduced a second one, restitution applied in the wrong reference frame on a
-rotating wall, and corrected it in CFX release 27R2, due summer 2027. Their description adds that
-the child's starting position was wrong as well as its velocity, which was not part of my
-diagnosis and probably explains the one symptom I could not account for from outside the solver.
+rotating wall, and corrected it in CFX release 27R2, due summer 2027.
 The newest is an undocumented parameter in ANSYS CFX that silently stops a fragmentation cascade
 after three generations. I found it by reconstructing particle lineage: at generation three **no
 particle ever broke, although 3,773 impacts carried more than enough energy**. Anyone running
