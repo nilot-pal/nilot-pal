@@ -87,7 +87,7 @@ is exact in a box and not deployable in a real machine.
 ## Technical
 
 **Languages and tooling** Python · Fortran 90 · C++ · CUDA · MATLAB · Bash · Linux · Slurm · MPI · OpenMP · CMake · Nsight Compute · Git
-**Numerical** Iterative solvers for linear systems (Gauss-Seidel, SOR, ADI) · finite volume and finite difference · verification against manufactured and analytic solutions · stability analysis · approximate Riemann solvers (HLLC) · special functions from scratch · cubic splines and spline inversion · bit-level IEEE-754 encoding · meshfree/SPH · Lagrangian particle tracking · KD-tree spatial search · constrained optimization (SQP) and inverse problems · surrogate and reduced-order modeling (PyTorch, scikit-learn, XGBoost)
+**Numerical** Iterative solvers for linear systems (Gauss-Seidel, SOR, ADI) · finite volume and finite difference · verification against manufactured and analytic solutions · stability analysis · approximate Riemann solvers (HLLC) · special functions from scratch, unit-tested against GSL and Intel MKL · cubic splines and spline inversion · bit-level IEEE-754 encoding · meshfree/SPH · Lagrangian particle tracking · KD-tree spatial search · constrained optimization (SQP) and inverse problems · surrogate and reduced-order modeling (PyTorch, scikit-learn, XGBoost)
 **Simulation** ANSYS CFX · Fluent · STAR-CCM+ · TurboGrid · ICEM CFD · solver-embedded user subroutines
 
 ## Awards
